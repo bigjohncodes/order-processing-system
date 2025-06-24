@@ -39,7 +39,7 @@ An **Inventory Management System** built using **Angular 19** and **NgRx** to ma
 ## 📁 Project Structure
 
 ### Angular Folder Structure
-
+<pre lang="markdown"> <code> ```plaintext
 src/
 └── app/
     ├── features/
@@ -82,3 +82,4 @@ src/
     ├── app.module.ts
     ├── app.component.ts
     └── app.component.html
+``` </code> </pre>
