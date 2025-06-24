@@ -1,0 +1,8 @@
+rootProject.name = 'InventoryOrder'
+include 'microservices:orderService'
+include 'microservices:InventoryService'
+include 'proto-api'
+include 'Utils'
+include 'microservices:NotificationService'
+findProject(':microservices:NotificationService')?.name = 'NotificationService'
+
