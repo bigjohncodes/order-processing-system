@@ -1,4 +1,4 @@
-﻿# Order Processing System
+m﻿# Order Processing System
 # 🛒 Inventory Order System - Distributed Transaction (Microservices)
 
 This system implements the **Create Order** distributed transaction, using **Spring Boot**, **gRPC**, and a combination of **MongoDB** and **PostgreSQL** databases. The system handles order creation, Inventory availability checks, and order status updates based on the Inventory's availability. It ensures the integrity of the transaction across multiple microservices, following the **Saga Pattern** for managing distributed transactions.
@@ -221,22 +221,6 @@ message OrderResponse {
 * Microservices: `backend/microservices/`
 
 ---
-
-## 🏁 Running the System
-
-```bash
-git clone https://github.com/your-username/order-processing-system.git
-cd order-processing-system
-docker-compose up --build
-```
-
-Check:
-
-* Angular frontend: [http://localhost:4200](http://localhost:4200)
-* Kafdrop (if enabled): [http://localhost:9000](http://localhost:9000)
-* MongoDB: localhost:27017
-* PostgreSQL: localhost:5
-
   
 ## 🧱 Microservices
 
@@ -303,12 +287,12 @@ Check:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/Inventory-order-system.git
-cd InventoryOrder
+git clone https://github.com/bigjohncodes/order-processing-system.git
 ```
 
 2. Start the services  along with the infrastructure (MongoDB, PostgreSQL, Kafka, Zookeeper, and Kafdrop) using Docker Compose:
 ```bash
+.graddlew build
 docker-compose up -d
 ```
 
@@ -355,7 +339,7 @@ The `docker-compose.yml` file sets up the following services:
 
 ### Network and Volumes
 
-- **Network**: `Inventory-order-network` (bridge network for service communication)
+- **Network**: `order-processing-network` (bridge network for service communication)
 - **Volumes**:
     - `mongodb_data`: Persistent storage for MongoDB
     - `postgres_data`: Persistent storage for PostgreSQL
@@ -404,7 +388,7 @@ Run tests with Gradle:
 
 ## 🔄 Roadmap & Future Enhancements
 
-This project is actively evolving. In the pipeline is the development of additional microservices including a dedicated Notification Service for order updates and an Infrastructure layer incorporating API Gateway, Circuit Breaker patterns. Kubernetes deployment configurations are also under development to enable container orchestration, autoscaling, and improved resilience for Inventoryion environments.
+This project is a solution built in response to a task given and it is actively evolving. In the pipeline is the development of additional microservices including a dedicated Notification Service for order updates and an Infrastructure layer incorporating API Gateway, Circuit Breaker patterns. Kubernetes deployment configurations are also under development to enable container orchestration, autoscaling, and improved resilience for Inventoryion environments.
 
 ---
 
