@@ -203,7 +203,6 @@ message OrderResponse {
 ```bash
 ./gradlew test                     # All services
 ./gradlew :microservices:orderService:test
-./gradlew :microservices:inventoryService:test
 ```
 
 ---
@@ -236,68 +235,9 @@ Check:
 * Angular frontend: [http://localhost:4200](http://localhost:4200)
 * Kafdrop (if enabled): [http://localhost:9000](http://localhost:9000)
 * MongoDB: localhost:27017
-* PostgreSQL: localhost:5432
+* PostgreSQL: localhost:5
 
-```
-```
-             |
-| Frontend           | Angular                    |
-
-
-
-## Project structure
-/order-processing-system
-├── backend/
-│   ├── .gradle/
-│   ├── .idea/
-│   ├── assets/
-│   │   └── architecture.png
-│   ├── build/
-│   ├── gradle/
-│   ├── microservices/
-│   │   ├── build/
-│   │   ├── orderService/
-│   │   ├── inventoryService/
-│   │   ├── src/
-│   │   └── build.gradle
-│   ├── proto-api/
-│   │   └── (gRPC .proto files)
-│   ├── src/
-│   ├── Utils/
-│   │   ├── Custom exceptions/
-│   │   ├── Models and DTOs/
-│   │   ├── Events/
-│   │   └── Global error handling/
-│   ├── create-projects.bash
-│   ├── build.gradle
-│   ├── settings.gradle
-│   ├── gradlew
-│   ├── gradlew.bat
-│   ├── .gitignore
-│   └── docker-compose.yml
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── core/
-│   │   │   ├── shared/
-│   │   │   ├── features/
-│   │   │   │   ├── inventory/
-│   │   │   │   └── order/
-│   │   │   ├── assets/
-│   │   │   └── app.component.ts
-│   │   ├── assets/
-│   │   ├── environments/
-│   │   │   ├── environment.ts
-│   │   │   └── environment.prod.ts
-│   │   └── main.ts
-│   ├── angular.json
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── tsconfig.app.json
-│   ├── tsconfig.spec.json
-│   ├── README.md
-│   └── .gitignore
-
+  
 ## 🧱 Microservices
 
 | Service Name       | Description                                                             | Database      |
