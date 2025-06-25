@@ -30,6 +30,7 @@ public class OrderEventHandler {
                     .totalAmount(0.0)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
+                    .orderName("")
                     .transactionId("TXN_" + System.currentTimeMillis())
                     .build();
 
@@ -43,6 +44,7 @@ public class OrderEventHandler {
                 Order order = orderOptional.get();
                 order.setStatus("PROCESSING");
                 order.setTotalAmount(e.getPrice());
+                order.setOrderName(e.getProductName());
                 order.setUpdatedAt(LocalDateTime.now());
                 Order savedOrder = repository.save(order);
                 return mapToOrderDTO(savedOrder);
@@ -55,6 +57,7 @@ public class OrderEventHandler {
                         .createdAt(LocalDateTime.now())
                         .updatedAt(LocalDateTime.now())
                         .transactionId("TXN_" + System.currentTimeMillis())
+                        .orderName(e.getProductName())
                         .build();
                 Order savedOrder = repository.save(newOrder);
                 return mapToOrderDTO(savedOrder);
@@ -70,6 +73,7 @@ public class OrderEventHandler {
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .transactionId(order.getTransactionId())
+                .orderName(order.getOrderName())
                 .build();
     }
 }

@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 service OrderService {
   rpc CreateOrder(OrderRequest) returns (OrderResponse);
   rpc GetAllOrders(google.protobuf.Empty) returns (OrderListResponse);
+  rpc GetOrderById(OrderRequestById) returns (OrderResponse);
 }
 
 message OrderRequest {
@@ -15,10 +16,16 @@ message OrderRequest {
   int32 quantity = 2;
 }
 
+message OrderRequestById {
+  int64 orderId = 1;
+}
+
 message OrderResponse {
   int64 orderId = 1;
   string status = 2;
   double totalPrice = 3;
+  string orderName = 4;
+
 }
 
 message OrderListResponse {

@@ -39,17 +39,20 @@ export class ListProductsComponent {
   }
 
   openModalAdd(): void {
-    this.product = {id: -1, name: '', quantity: 0, price: 0, description: ''};
+    this.product = {id: -1, name: '', stock: 0, price: 0, description: ''};
     this.label = 'Add';
   }
 
   openModalUpdate(product: Product): void {
-    this.product = product;
+   
+
+    this.product = { ...product };
     this.label = 'Update';
+    
   }
 
-  goToDetail(name: string) {
-    this.router.navigate(['detail', name]);
+  goToDetail(id: number) {
+    this.router.navigate(['detail', id]);
 
   }
 

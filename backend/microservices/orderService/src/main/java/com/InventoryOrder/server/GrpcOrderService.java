@@ -3,6 +3,7 @@ package com.InventoryOrder.server;
 import com.google.protobuf.Empty;
 import com.InventoryOrder.OrderServiceGrpc;
 import com.InventoryOrder.OrderRequest;
+import com.InventoryOrder.OrderRequestById;
 import com.InventoryOrder.OrderResponse;
 import com.InventoryOrder.OrderListResponse;
 import com.InventoryOrder.Events.OrderEvent;
@@ -50,6 +51,7 @@ public class GrpcOrderService extends OrderServiceGrpc.OrderServiceImplBase {
                 .setOrderId(orderId)
                 .setStatus("PENDING")
                 .setTotalPrice(0.0)
+                .setOrderName(order.getOrderName() == null ? "" : order.getOrderName())
                 .build();
 
         responseObserver.onNext(response);
@@ -67,6 +69,7 @@ public class GrpcOrderService extends OrderServiceGrpc.OrderServiceImplBase {
                     .setOrderId(Long.parseLong(order.getOrderId()))
                     .setStatus(order.getStatus())
                     .setTotalPrice(order.getTotalAmount())
+                    .setOrderName(order.getOrderName())
                     .build();
 
             responseBuilder.addOrders(response);
@@ -75,5 +78,33 @@ public class GrpcOrderService extends OrderServiceGrpc.OrderServiceImplBase {
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void getOrderById(OrderRequestById request, StreamObserver<OrderResponse> responseObserver) {
+        Order order = orderRepository.findById(Long.toString(request.getOrderId()))
+        .orElse(null);     
+        
+        OrderResponse.Builder responseBuilder = OrderResponse.newBuilder();
+        if (order != null) {
+            responseBuilder
+                    .setOrderId(Long.parseLong(order.getOrderId()))
+                    .setStatus(order.getStatus())
+                    .setTotalPrice(order.getTotalAmount())
+                    .setOrderName(order.getOrderName())
+                    .build();
+        } else {
+            responseBuilder
+                .setOrderId(request.getOrderId())
+                .setStatus("PENDING")
+                .setTotalPrice(0.0)
+                .setOrderName("")
+                .build();
+                        
+        }
+
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+    }
+   
 }
 

@@ -36,17 +36,17 @@ export const orderReducer = createReducer(
   })),
 
 
-  on(OrderActions.loadOrderByName, (state,{name}) => ({
+  on(OrderActions.loadOrderById, (state,{orderId}) => ({
     ...state,
     loading: true,
     error: null,
   })),
-  on(OrderActions.loadOrderByNameSuccess, (state, { order }) => ({
+  on(OrderActions.loadOrderByIdSuccess, (state, { order }) => ({
     ...state,
     order,
     loading: false,
   })),
-  on(OrderActions.loadOrderByNameFailure, (state, { error }) => ({
+  on(OrderActions.loadOrderByIdFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
@@ -61,12 +61,12 @@ export const orderReducer = createReducer(
   on(OrderActions.updateOrderSuccess, (state, { order }) => ({
     ...state,
     orders: state.orders.map((p) =>
-      p.id === order.id ? { ...p, ...order } : p
+      p.orderId === order.orderId ? { ...p, ...order } : p
     ),
   })),
   
   on(OrderActions.deleteOrderSuccess, (state, { orderId }) => ({
     ...state,
-    orders: state.orders.filter((p) => p.id !== orderId),
+    orders: state.orders.filter((p) => p.orderId !== orderId),
   }))
 );

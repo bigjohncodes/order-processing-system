@@ -42,8 +42,9 @@ public class InventoryEventHandler {
             InventoryRepository.save(Inventory);
 
             responseEvent.setStatus("AVAILABLE");
-            responseEvent.setInventoryId(InventoryId);
+            responseEvent.setId(InventoryId);
             responseEvent.setPrice(Inventory.getPrice() * quantity);
+            responseEvent.setProductName(Inventory.getName());
         }
         kafkaTemplate.send("Inventory-Response-topic", responseEvent);
         log.info("Inventory response sent for order: {}", orderEvent.getOrderId());

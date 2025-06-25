@@ -12,4 +12,5 @@ public class OrderEvent {
     private Long InventoryId;
     private int quantity;
     private String status;
+    private String productName;
 }

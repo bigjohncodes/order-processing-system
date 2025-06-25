@@ -15,7 +15,6 @@ public class GrpcClient {
         InventoryServiceGrpc.InventoryServiceBlockingStub stub = InventoryServiceGrpc.newBlockingStub(channel);
 
         CreateInventoryRequest request = CreateInventoryRequest.newBuilder()
-        .setInventoryId(1)              // your inventory id
         .setName("Laptop")              // product name
         .setStock(10)                  // stock quantity
         .setPrice(550.0)               // price
@@ -23,7 +22,7 @@ public class GrpcClient {
        
         InventoryResponse response = stub.createInventory(request);
 
-        System.out.println("Command create : ID = " + response.getInventoryId() +
+        System.out.println("Command create : ID = " + response.getId() +
                 ", StatuName: " + response.getName() +
                 ", Stock: " + response.getStock() +
                 ", Price: " + response.getPrice()

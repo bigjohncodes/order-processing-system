@@ -12,8 +12,8 @@ export const loadProductsFailure = createAction(
   props<{ error: any }>()
 );
 
-export const loadProductByName = createAction('[Product] Load Product by name',
-   props<{ name: string }>()
+export const loadProductById = createAction('[Product] Load Product by name',
+   props<{ id: number }>()
   );
 export const loadProductByNameSuccess = createAction(
   '[Product] Load Product By Name Success',

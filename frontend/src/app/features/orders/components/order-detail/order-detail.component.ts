@@ -25,8 +25,11 @@ export class OrderDetailComponent implements OnInit{
   }
 
   ngOnInit() {
-    const OrderName = this.route.snapshot.paramMap.get('name');
-    this.store.dispatch(OrderActions.loadOrderByName({ name: OrderName || '' }));
+    const orderIdString = this.route.snapshot.paramMap.get('orderId');
+    const orderId = orderIdString ? Number(orderIdString) : 0;  // Convert to number or 0 if null
+    this.store.dispatch(OrderActions.loadOrderById({ orderId: orderId }));
+
+
   }
 
 }
