@@ -21,17 +21,17 @@ export class ProductService {
 
   updateProduct(product: Product): Observable<Product> {
     return this.http.put<Product>(
-      `${this.apiUrl}/updateProduct/${product.id}`,
+      `${this.apiUrl}/${product.id}`,
       product
     );
   }
 
   deleteProduct(productId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/deleteProduct/${productId}`);
+    return this.http.delete<void>(`${this.apiUrl}/${productId}`);
   }
 
-  findProductByName(name: string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/getProductByName/${name}`);
+  findProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
 }

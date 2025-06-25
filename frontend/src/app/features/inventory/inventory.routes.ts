@@ -16,7 +16,7 @@ export default [
     ]
   },
   {
-    path: 'detail/:name',
+    path: 'detail/:id',
     component: ProductDetailComponent
   }
 ] satisfies Routes;

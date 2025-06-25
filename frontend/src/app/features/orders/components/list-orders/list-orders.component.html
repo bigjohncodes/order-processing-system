@@ -25,24 +25,19 @@
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">order Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Total</th>
+
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let order of orders$ | async">
-                        <th scope="row">{{ order.id }}</th>
-                        <td>{{ order.name }}</td>
+                        <th scope="row">{{ order.orderId }}</th>
+                        <td>{{ order.orderName }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.totalPrice }}</td>
                         <td> 
-                          <button type="button" class="btn btn-success" (click)="goToDetail(order.name)">Detail</button>
-                      </td>
-                        <td> 
-                            <button type="button" class="btn btn-danger" (click)="deleteOrder(order.id)">Delete</button>
-                        </td>
-                        <td>
-                            <button type="button" 
-                             class="btn btn-secondary"
-                             data-bs-toggle="modal" 
-                             data-bs-target="#exampleModal" 
-                             data-bs-whatever="@mdo" (click)="openModalUpdate(order)">Update</button>
+                          <button type="button" class="btn btn-success" (click)="goToDetail(order.orderId)">Detail</button>
                         </td>
                       </tr>
                     </tbody>

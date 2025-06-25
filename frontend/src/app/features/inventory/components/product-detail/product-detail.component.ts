@@ -25,8 +25,10 @@ export class ProductDetailComponent implements OnInit{
   }
 
   ngOnInit() {
-    const ProductName = this.route.snapshot.paramMap.get('name');
-    this.store.dispatch(ProductActions.loadProductByName({ name: ProductName || '' }));
+    const productIdString = this.route.snapshot.paramMap.get('id');
+    const productId = productIdString ? Number(productIdString) : 0;  // Convert to number or 0 if null
+    this.store.dispatch(ProductActions.loadProductById({ id: productId }));
+
   }
 
 }

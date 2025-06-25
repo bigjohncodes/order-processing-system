@@ -23,16 +23,25 @@
                 <table class="table table-striped">
                     <thead>
                       <tr>
+                        <th scope="col">NO</th>
                         <th scope="col">ID</th>
-                        <th scope="col">Product Name</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Price</th>
+
+
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let product of products$ | async">
+                      <tr *ngFor="let product of products$ | async; let i = index">
+
+                        <th scope="row">{{ i + 1 }}</th>
                         <th scope="row">{{ product.id }}</th>
                         <td>{{ product.name }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>{{ product.price }}</td>
                         <td> 
-                          <button type="button" class="btn btn-success" (click)="goToDetail(product.name)">Detail</button>
+                          <button type="button" class="btn btn-success" (click)="goToDetail(product.id)">Detail</button>
                       </td>
                         <td> 
                             <button type="button" class="btn btn-danger" (click)="deleteProduct(product.id)">Delete</button>

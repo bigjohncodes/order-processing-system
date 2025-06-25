@@ -80,9 +80,9 @@ export class ProductEffects {
 
   findProductByName$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProductActions.loadProductByName),
+      ofType(ProductActions.loadProductById),
       mergeMap(action =>
-        this.productService.findProductByName(action.name).pipe(
+        this.productService.findProductById(action.id).pipe(
           map(product => ProductActions.loadProductByNameSuccess({ product })),
           catchError(error => of(ProductActions.loadProductByNameFailure({ error })))
         )

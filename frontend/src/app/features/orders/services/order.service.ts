@@ -7,31 +7,31 @@ import { Order } from '../model/Order';
 export class OrderService {
 
   
-  private apiUrl = 'http://localhost:8080/order';
+  private apiUrl = 'http://localhost:8081/api/orders';
 
   constructor(private http: HttpClient) {}
 
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/listOrder`);
+    return this.http.get<Order[]>(`${this.apiUrl}`);
   }
 
   addOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.apiUrl}/addOrder`, order);
+    return this.http.post<Order>(`${this.apiUrl}`, order);
   }
 
   updateOrder(order: Order): Observable<Order> {
     return this.http.put<Order>(
-      `${this.apiUrl}/updateOrder/${order.id}`,
+      `${this.apiUrl}/updateOrder/${order.orderId}`,
       order
     );
   }
 
   deleteOrder(orderId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/deleteOrder/${orderId}`);
+    return this.http.delete<void>(`${this.apiUrl}/${orderId}`);
   }
 
-  findOrderByName(name: string): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/getOrderByName/${name}`);
+  findOrderByName(orderId: number): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/getOrderByName/${orderId}`);
   }
 
 }

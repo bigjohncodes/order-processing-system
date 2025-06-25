@@ -7,6 +7,7 @@ import com.InventoryOrder.InventoryListResponse;
 import com.InventoryOrder.InventoryRequest;
 import com.InventoryOrder.InventoryResponse;
 import com.InventoryOrder.InventoryServiceGrpc;
+import com.InventoryOrder.UpdateInventoryRequest;
 import com.InventoryOrder.Repository.InventoryRepository;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -23,21 +24,23 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
 
     @Override
     public void getInventoryById(InventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        Inventory Inventory = InventoryRepository.findById(request.getInventoryId())
+        Inventory Inventory = InventoryRepository.findById(request.getId())
                 .orElse(null);
         InventoryResponse.Builder responseBuilder = InventoryResponse.newBuilder();
         if (Inventory != null) {
             responseBuilder
-                    .setInventoryId(Inventory.getInventoryId())
+                    .setId(Inventory.getId())
                     .setName(Inventory.getName())
                     .setStock(Inventory.getStock())
-                    .setPrice(Inventory.getPrice());
+                    .setPrice(Inventory.getPrice())
+                    .setDescription(Inventory.getDescription());
         } else {
             responseBuilder
-                    .setInventoryId(request.getInventoryId())
+                    .setId(request.getId())
                     .setName("Inventory not found")
                     .setStock(0)
-                    .setPrice(0.0);
+                    .setPrice(0.0)
+                    .setDescription("");
         }
 
         responseObserver.onNext(responseBuilder.build());
@@ -46,16 +49,14 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
     @Override
     public void createInventory(CreateInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
         // Check if inventory with same ID exists
-        boolean existsById = InventoryRepository.existsById(request.getInventoryId());
-
+        
         // Check if inventory with same name exists (case insensitive)
         boolean existsByName = InventoryRepository.existsByNameIgnoreCase(request.getName());
 
         InventoryResponse.Builder responseBuilder = InventoryResponse.newBuilder();
 
-        if (existsById) {
+        if (existsByName) {
             responseBuilder
-                .setInventoryId(request.getInventoryId())
                 .setName("Inventory with this ID already exists")
                 .setStock(0)
                 .setPrice(0.0);
@@ -66,7 +67,7 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
 
         if (existsByName) {
             responseBuilder
-                .setInventoryId(0) // ID unknown since duplicate by name
+                .setId(0) // ID unknown since duplicate by name
                 .setName("Inventory with this name already exists")
                 .setStock(0)
                 .setPrice(0.0);
@@ -77,17 +78,18 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
 
         // If checks pass, create and save inventory
         Inventory inventory = new Inventory();
-        inventory.setInventoryId(request.getInventoryId());
         inventory.setName(request.getName());
         inventory.setStock(request.getStock());
         inventory.setPrice(request.getPrice());
+        inventory.setDescription(request.getDescription());
 
         InventoryRepository.save(inventory);
         InventoryResponse response = InventoryResponse.newBuilder()
-                .setInventoryId(inventory.getInventoryId())
+                .setId(inventory.getId())
                 .setName(inventory.getName())
                 .setStock(inventory.getStock())
                 .setPrice(inventory.getPrice())
+                .setDescription(inventory.getDescription())
                 .build();
 
         responseObserver.onNext(response);
@@ -102,10 +104,11 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
 
         for (Inventory inventory : inventoryList) {
             InventoryResponse inventoryResponse = InventoryResponse.newBuilder()
-                    .setInventoryId(inventory.getInventoryId())
+                    .setId(inventory.getId())
                     .setName(inventory.getName())
                     .setStock(inventory.getStock())
                     .setPrice(inventory.getPrice())
+                    .setDescription(inventory.getDescription())
                     .build();
 
             responseBuilder.addInventories(inventoryResponse);
@@ -114,5 +117,41 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void updateInventory(UpdateInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
+        Inventory inventory = InventoryRepository.findByNameIgnoreCase(request.getName()).orElse(null);
+
+        if (inventory == null) {
+            responseObserver.onError(new Throwable("Inventory not found"));
+            return;
+        }
+
+        inventory.setName(request.getName());
+        inventory.setStock(request.getStock());
+        inventory.setPrice(request.getPrice());
+        inventory.setDescription(request.getDescription());
+
+        InventoryRepository.save(inventory);
+
+        InventoryResponse response = InventoryResponse.newBuilder()
+                .setId(inventory.getId())
+                .setName(inventory.getName())
+                .setStock(inventory.getStock())
+                .setPrice(inventory.getPrice())
+                .setDescription(inventory.getDescription())
+                .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void deleteInventory(InventoryRequest request, StreamObserver<Empty> responseObserver) {
+        InventoryRepository.deleteById(request.getId());
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
+
 
 }

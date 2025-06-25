@@ -12,14 +12,14 @@ export const loadOrdersFailure = createAction(
   props<{ error: any }>()
 );
 
-export const loadOrderByName = createAction('[Order] Load Order by name',
-   props<{ name: string }>()
+export const loadOrderById = createAction('[Order] Load Order by name',
+   props<{ orderId: number }>()
   );
-export const loadOrderByNameSuccess = createAction(
+export const loadOrderByIdSuccess = createAction(
   '[Order] Load Order By Name Success',
   props<{ order: Order | null}>()
 );
-export const loadOrderByNameFailure = createAction(
+export const loadOrderByIdFailure = createAction(
   '[Order] Load Order By Name Failure',
   props<{ error: any }>()
 );

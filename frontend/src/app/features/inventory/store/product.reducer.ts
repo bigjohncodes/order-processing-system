@@ -36,7 +36,7 @@ export const productReducer = createReducer(
   })),
 
 
-  on(ProductActions.loadProductByName, (state,{name}) => ({
+  on(ProductActions.loadProductById, (state,{id}) => ({
     ...state,
     loading: true,
     error: null,

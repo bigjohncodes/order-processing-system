@@ -13,26 +13,38 @@ service InventoryService {
   rpc GetInventoryById(InventoryRequest) returns (InventoryResponse);
   rpc CreateInventory(CreateInventoryRequest) returns (InventoryResponse);
   rpc GetAllInventories(google.protobuf.Empty) returns (InventoryListResponse);
+  rpc UpdateInventory(UpdateInventoryRequest) returns (InventoryResponse);
+  rpc DeleteInventory(InventoryRequest) returns (google.protobuf.Empty);
+
+
 }
 
 message InventoryRequest {
-  int64 InventoryId = 1;
+  int64 id = 1;
 }
 
 message InventoryResponse {
-  int64 InventoryId = 1;
+  int64 id = 1;
   string name = 2;
   int32 stock = 3;
   double price = 4;
+  string description = 5;
 }
 
 message CreateInventoryRequest {
-  int64 inventoryId = 1;
+  string name = 1;
+  int32 stock = 2;
+  double price = 3;
+  string description = 4;
+}
+
+message UpdateInventoryRequest {
+  int64 id = 1;
   string name = 2;
   int32 stock = 3;
   double price = 4;
+  string description = 5;
 }
-
 
 message InventoryListResponse {
   repeated InventoryResponse inventories = 1;

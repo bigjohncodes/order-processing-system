@@ -25,7 +25,7 @@ class GrpcInventoryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);  // Initialize mocks
-        request = InventoryRequest.newBuilder().setInventoryId(1L).build();
+        request = InventoryRequest.newBuilder().setId(1L).build();
         responseObserver = mock(StreamObserver.class);  // Mock StreamObserver
     }
 
@@ -33,10 +33,11 @@ class GrpcInventoryServiceTest {
     void testGetInventoryById_InventoryFound() {
         // Arrange: Mock InventoryRepository behavior (no DB call needed)
         Inventory inventory = Inventory.builder()
-                .InventoryId(1L)
+                .id(1L)
                 .name("Inventory 1")
                 .stock(100)
                 .price(10.0)
+                .description("description")
                 .build();
 
         // Mock the findById method to return the Inventory
@@ -50,10 +51,11 @@ class GrpcInventoryServiceTest {
 
         // Build the expected response (using real InventoryResponse)
         InventoryResponse expectedResponse = InventoryResponse.newBuilder()
-                .setInventoryId(1L)
+                .setId(1L)
                 .setName("Inventory 1")
                 .setStock(100)
                 .setPrice(10.0)
+                .setDescription("description")
                 .build();
 
         // Capture the argument passed to the onNext method using ArgumentCaptor
@@ -62,7 +64,7 @@ class GrpcInventoryServiceTest {
 
         // Assert the captured response matches the expected response
         InventoryResponse capturedResponse = captor.getValue();
-        assertEquals(expectedResponse.getInventoryId(), capturedResponse.getInventoryId());
+        assertEquals(expectedResponse.getId(), capturedResponse.getId());
         assertEquals(expectedResponse.getName(), capturedResponse.getName());
         assertEquals(expectedResponse.getStock(), capturedResponse.getStock());
         assertEquals(expectedResponse.getPrice(), capturedResponse.getPrice());
@@ -84,7 +86,7 @@ class GrpcInventoryServiceTest {
 
         // Build the expected response for a "Inventory not found" scenario
         InventoryResponse expectedResponse = InventoryResponse.newBuilder()
-                .setInventoryId(1L)
+                .setId(1L)
                 .setName("Inventory not found")
                 .setStock(0)
                 .setPrice(0.0)
@@ -96,7 +98,7 @@ class GrpcInventoryServiceTest {
 
         // Assert the captured response matches the expected response
         InventoryResponse capturedResponse = captor.getValue();
-        assertEquals(expectedResponse.getInventoryId(), capturedResponse.getInventoryId());
+        assertEquals(expectedResponse.getId(), capturedResponse.getId());
         assertEquals(expectedResponse.getName(), capturedResponse.getName());
         assertEquals(expectedResponse.getStock(), capturedResponse.getStock());
         assertEquals(expectedResponse.getPrice(), capturedResponse.getPrice());
