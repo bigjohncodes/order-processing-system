@@ -3,7 +3,7 @@
 
     <div class="mb-3">
       <label for="product-label" class="form-label">Product</label>
-      <select class="form-control" formControlName="id" id="product-select">
+      <select class="form-control" formControlName="inventoryId" id="product-select">
         <option value="">Select a product</option>
         <option *ngFor="let product of products$ | async" [value]="product.id">
           {{ product.name }}

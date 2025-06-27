@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Order } from '../model/Order';
+import { CreateOrderRequest, Order } from '../model/Order';
 
 
 export const loadOrders = createAction('[Order] Load Orders');
@@ -26,7 +26,7 @@ export const loadOrderByIdFailure = createAction(
 
 export const addOrder = createAction(
   '[Order] Add Order',
-  props<{ order: Order }>()
+  props<{ order: CreateOrderRequest }>()
 );
 export const addOrderSuccess = createAction(
   '[Order] Add Order Success',

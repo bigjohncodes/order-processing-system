@@ -44,8 +44,9 @@ export class OrderEffects {
         )
       )
     )
+    
   );
-
+  
   updateOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.updateOrder),
@@ -78,11 +79,11 @@ export class OrderEffects {
     )
   );
 
-  findOrderByName$ = createEffect(() =>
+  loadOrderById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.loadOrderById),
       mergeMap(action =>
-        this.orderService.findOrderByName(action.orderId).pipe(
+        this.orderService.findOrderById(action.orderId).pipe(
           map(order => OrderActions.loadOrderByIdSuccess({ order })),
           catchError(error => of(OrderActions.loadOrderByIdFailure({ error })))
         )

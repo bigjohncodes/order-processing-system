@@ -1,59 +1,4 @@
-// import { Component, Input, OnInit } from '@angular/core';
-// import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { Store } from '@ngrx/store';
-// import { Observable } from 'rxjs';
-// import { CommonModule } from '@angular/common';
 
-// import { Product } from '../../../inventory/model/Product';  
-// import { Order } from '../../model/Order';
-// import * as ProductActions from '../../../inventory/store/product.action';
-// import * as ProductSelectors from '../../../inventory/store/product.selector';
-// import * as OrderActions from '../../store/order.action';
-
-// @Component({
-//   selector: 'app-order-form',
-//   standalone: true,
-//   imports: [ReactiveFormsModule, CommonModule],
-//   templateUrl: './order-form.component.html',
-//   styleUrls: ['./order-form.component.css']
-// })
-// export class OrderFormComponent implements OnInit {
-
-//   @Input() order!: Order;
-
-//   orderForm: FormGroup;
-//   products$: Observable<Product[]>;
-
-//   constructor(private fb: FormBuilder, private store: Store) {
-//     this.orderForm = this.fb.group({
-//       productId: [null, Validators.required],
-//       name: ['', Validators.required],
-//       quantity: [0, [Validators.required, Validators.min(1)]],
-//       price: [0, [Validators.required, Validators.min(0)]],
-//       description: ['', Validators.maxLength(500)],
-//     });
-
-//     this.products$ = this.store.select(ProductSelectors.selectAllProducts);
-//   }
-
-//   ngOnInit(): void {
-//     this.store.dispatch(ProductActions.loadProducts());
-//   }
-
-//   onSubmit(): void {
-//     if (this.orderForm.valid) {
-//       if (this.order?.id > -1) {
-//         this.orderForm.addControl('id', this.fb.control(this.order.id));
-//         this.store.dispatch(OrderActions.updateOrder({ order: this.orderForm.value }));
-//         this.orderForm.removeControl('id');
-//       } else {
-//         this.store.dispatch(OrderActions.addOrder({ order: this.orderForm.value }));
-//       }
-
-//       this.orderForm.reset();
-//     }
-//   }
-// }
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -87,7 +32,7 @@ export class OrderFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.orderForm = this.fb.group({
-      id: [null, Validators.required],
+      inventoryId: [null, Validators.required],
       stock: [0, [Validators.required, Validators.min(1)]],
       price: [0, [Validators.required, Validators.min(0)]]
     });
@@ -102,7 +47,7 @@ export class OrderFormComponent implements OnInit {
       this.productList = products;
     });
 
-    this.orderForm.get('id')?.valueChanges.subscribe(productId => {
+    this.orderForm.get('inventoryId')?.valueChanges.subscribe(productId => {
       const selectedProduct = this.productList.find(p => p.id === +productId);
       if (selectedProduct) {
         this.orderForm.get('price')?.setValue(selectedProduct.price);
@@ -129,23 +74,37 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
+  // onSubmit(): void {
+  //   if (this.orderForm.valid) {
+  //     const formValue = this.orderForm.getRawValue();
+  //     const payload = {
+  //       inventoryId: formValue.inventoryId,
+  //       quantity: formValue.stock
+  //     };
+      
+  //     if (this.order?.orderId > -1) {
+  //       this.store.dispatch(OrderActions.updateOrder({ order: payload }));
+  //     } else {
+  //       this.store.dispatch(OrderActions.addOrder({ order: payload }));
+  //     }
+
+  //     this.orderForm.reset();
+  //     this.totalPrice = 0;
+  //   }
+  // }
   onSubmit(): void {
     if (this.orderForm.valid) {
       const formValue = this.orderForm.getRawValue();
       const payload = {
-        ...formValue,
-        inventoryId: formValue.productId
+        inventoryId: formValue.inventoryId,
+        quantity: formValue.stock
       };
-
-      if (this.order?.orderId > -1) {
-        payload['id'] = this.order.orderId;
-        this.store.dispatch(OrderActions.updateOrder({ order: payload }));
-      } else {
-        this.store.dispatch(OrderActions.addOrder({ order: payload }));
-      }
-
+  
+      this.store.dispatch(OrderActions.addOrder({ order: payload }));
+  
       this.orderForm.reset();
       this.totalPrice = 0;
     }
   }
+  
 }

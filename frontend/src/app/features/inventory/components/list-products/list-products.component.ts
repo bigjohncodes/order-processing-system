@@ -52,7 +52,7 @@ export class ListProductsComponent {
   }
 
   goToDetail(id: number) {
-    this.router.navigate(['detail', id]);
+    this.router.navigate(['/inventory/detail', id]);
 
   }
 

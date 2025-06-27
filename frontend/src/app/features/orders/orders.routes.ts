@@ -5,6 +5,8 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { orderReducer } from './store/order.reducer';
 import { OrderEffects } from './store/order.effect';
+import { productReducer } from '../inventory/store/product.reducer';
+import { ProductEffects } from '../inventory/store/product.effect';
 
 export default [
   {
@@ -12,11 +14,12 @@ export default [
     component: ListOrdersComponent,
     providers: [
       provideState('orders', orderReducer),
-      provideEffects([OrderEffects])
+      provideState('products', productReducer),
+      provideEffects([OrderEffects, ProductEffects])
     ]
   },
   {
-    path: 'detail/:name',
+    path: 'order-detail/:id',
     component: OrderDetailComponent
   }
 ] satisfies Routes;

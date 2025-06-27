@@ -40,7 +40,7 @@ export class ListOrdersComponent {
   }
 
   openModalAdd(): void {
-    this.order = {orderId: -1, orderName: '', totalPrice: 0, status:''};
+    this.order = {orderId: -1, inventoryId: -1, orderName: '', totalPrice: 0, status:''};
     this.label = 'Add';
   }
 
@@ -50,7 +50,8 @@ export class ListOrdersComponent {
   }
 
   goToDetail(orderId: number) {
-    this.router.navigate(['detail', orderId]);
+    console.log(orderId);
+    this.router.navigate(['/order-detail', orderId]);
 
   }
 

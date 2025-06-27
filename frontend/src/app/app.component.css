@@ -15,3 +15,7 @@ h3 {
     height: 200px;
   }
   
+  a.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
