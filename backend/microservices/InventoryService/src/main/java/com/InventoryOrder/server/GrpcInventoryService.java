@@ -7,6 +7,8 @@ import com.InventoryOrder.InventoryListResponse;
 import com.InventoryOrder.InventoryRequest;
 import com.InventoryOrder.InventoryResponse;
 import com.InventoryOrder.InventoryServiceGrpc;
+import com.InventoryOrder.PaginatedInventoryRequest;
+import com.InventoryOrder.PaginatedInventoryResponse;
 import com.InventoryOrder.UpdateInventoryRequest;
 import com.InventoryOrder.Repository.InventoryRepository;
 import io.grpc.stub.StreamObserver;
@@ -15,6 +17,10 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 
 @GrpcService
 public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceImplBase {
@@ -45,6 +51,7 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
 
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
+
     }
     @Override
     public void createInventory(CreateInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
@@ -97,7 +104,7 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
     }
     
     @Override
-    public void getAllInventories(Empty request, StreamObserver<InventoryListResponse> responseObserver) {
+    public void getAllInventories(Empty request,  StreamObserver<InventoryListResponse> responseObserver) {
         List<Inventory> inventoryList = InventoryRepository.findAll();
 
         InventoryListResponse.Builder responseBuilder = InventoryListResponse.newBuilder();
@@ -117,6 +124,37 @@ public class GrpcInventoryService extends InventoryServiceGrpc.InventoryServiceI
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
+
+
+    @Override
+    public void getPaginatedInventory(PaginatedInventoryRequest request, StreamObserver<PaginatedInventoryResponse> responseObserver) {
+        int page = request.getPage();
+        int size = request.getSize();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Inventory> inventoryPage = InventoryRepository.findAll(pageable);
+
+        PaginatedInventoryResponse.Builder responseBuilder = PaginatedInventoryResponse.newBuilder()
+                .setCurrentPage(page)
+                .setTotalPages(inventoryPage.getTotalPages())
+                .setTotalElements(inventoryPage.getTotalElements());
+
+        for (Inventory inventory : inventoryPage.getContent()) {
+            InventoryResponse inventoryResponse = InventoryResponse.newBuilder()
+                    .setId(inventory.getId())
+                    .setName(inventory.getName())
+                    .setStock(inventory.getStock())
+                    .setPrice(inventory.getPrice())
+                    .setDescription(inventory.getDescription())
+                    .build();
+            responseBuilder.addInventories(inventoryResponse);
+        }
+
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+    }
+
+
 
     @Override
     public void updateInventory(UpdateInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {

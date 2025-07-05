@@ -6,6 +6,8 @@ import com.InventoryOrder.InventoryRequest;
 import com.InventoryOrder.InventoryResponse;
 import com.InventoryOrder.InventoryListResponse;
 import com.InventoryOrder.InventoryServiceGrpc;
+import com.InventoryOrder.PaginatedInventoryRequest;
+import com.InventoryOrder.PaginatedInventoryResponse;
 import com.InventoryOrder.UpdateInventoryRequest;
 import com.google.protobuf.Empty;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,8 @@ public class InventoryRestController {
                 .setPrice(dto.price())
                 .setDescription(dto.description())
                 .build();
+
+    
 
         InventoryResponse response = inventoryStub.createInventory(request);
         return mapToDto(response);
@@ -139,6 +143,57 @@ public class InventoryRestController {
         }
     }
 
+    // @GetMapping("/paginated")
+    // public PaginatedInventoryDto getPaginatedInventories(
+    //         @RequestParam(defaultValue = "0") int page,
+    //         @RequestParam(defaultValue = "10") int size
+    // ) {
+    //     PaginatedInventoryRequest grpcPageRequest = PaginatedInventoryRequest.newBuilder()
+    //             .setPage(page)
+    //             .setSize(size)
+    //             .build();
+
+    //     PaginatedInventoryResponse grpcPaginatedResponse = inventoryStub.getPaginatedInventory(grpcPageRequest);
+
+    //     List<InventoryDto> inventories = grpcPaginatedResponse.getInventoriesList()
+    //             .stream()
+    //             .map(this::mapToDto)
+    //             .toList();
+
+    //     return new PaginatedInventoryDto(
+    //             inventories,
+    //             grpcPaginatedResponse.getTotalPages(),
+    //             grpcPaginatedResponse.getTotalElements(),
+    //             grpcPaginatedResponse.getCurrentPage()
+    //     );
+    // }
+
+    @GetMapping("/paginated")
+    public PaginatedInventoryDto getPaginatedInventories(
+            @RequestParam(defaultValue = "1") int page,  //  1-based for client
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        int zeroBasedPage = Math.max(page - 1, 0); // Convert to 0-based for backend
+
+        PaginatedInventoryRequest grpcPageRequest = PaginatedInventoryRequest.newBuilder()
+                .setPage(zeroBasedPage)
+                .setSize(size)
+                .build();
+
+        PaginatedInventoryResponse grpcPaginatedResponse = inventoryStub.getPaginatedInventory(grpcPageRequest);
+
+        List<InventoryDto> inventories = grpcPaginatedResponse.getInventoriesList()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+
+        return new PaginatedInventoryDto(
+                inventories,
+                grpcPaginatedResponse.getTotalPages(),
+                grpcPaginatedResponse.getTotalElements(),
+                page 
+        );
+    }
 
 
     // Incoming payload for POST
@@ -146,4 +201,13 @@ public class InventoryRestController {
 
     // Outgoing DTO for response
     public record InventoryDto(long id, String name, int stock, double price,  String description) {}
+
+    // Outgoing DTO for paginated response
+    public record PaginatedInventoryDto(
+        List<InventoryDto> content,
+        int totalPages,
+        long totalElements,
+        int currentPage
+    ) {}
+
 }

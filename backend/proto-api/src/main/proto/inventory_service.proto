@@ -15,7 +15,7 @@ service InventoryService {
   rpc GetAllInventories(google.protobuf.Empty) returns (InventoryListResponse);
   rpc UpdateInventory(UpdateInventoryRequest) returns (InventoryResponse);
   rpc DeleteInventory(InventoryRequest) returns (google.protobuf.Empty);
-
+  rpc GetPaginatedInventory (PaginatedInventoryRequest) returns (PaginatedInventoryResponse);
 
 }
 
@@ -48,4 +48,16 @@ message UpdateInventoryRequest {
 
 message InventoryListResponse {
   repeated InventoryResponse inventories = 1;
+}
+
+message PaginatedInventoryRequest {
+  int32 page = 1;
+  int32 size = 2;
+}
+
+message PaginatedInventoryResponse {
+  repeated InventoryResponse inventories = 1;
+  int32 totalPages = 2;
+  int64 totalElements = 3;
+  int32 currentPage = 4;
 }
